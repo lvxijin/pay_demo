@@ -23,7 +23,10 @@ public class UnifiedOrderResponse extends WeixinpayBaseResponse {
 
 	@JSONField(name = "prepay_id")
 	private String prepayId; // 微信生成的预支付回话标识，用于后续接口调用中使用，该值有效期为2小时
-
+	
+	@JSONField(name = "code_url")
+	private String codeUrl; // 二维码下单时才会返回
+	
 	public UnifiedOrderResponse() {
 		super(true);
 	}
@@ -60,6 +63,14 @@ public class UnifiedOrderResponse extends WeixinpayBaseResponse {
 		this.prepayId = prepayId;
 	}
 
+	public String getCodeUrl() {
+		return codeUrl;
+	}
+	
+	public void setCodeUrl(String codeUrl) {
+		this.codeUrl = codeUrl;
+	}
+	
 	@Override
 	public boolean isSuccess() {
 		return "SUCCESS".equalsIgnoreCase(resultCode);

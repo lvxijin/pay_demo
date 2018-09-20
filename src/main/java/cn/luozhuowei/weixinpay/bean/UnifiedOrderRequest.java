@@ -13,6 +13,16 @@ import cn.luozhuowei.weixinpay.util.WeixinpayUtil;
 public class UnifiedOrderRequest extends WeixinpayBaseRequest<UnifiedOrderResponse> {
 
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * App下单 
+	 */
+	public static final String TRADE_TYPE_APP = "APP";
+	
+	/**
+	 * 二维码下单 
+	 */
+	public static final String TRADE_TYPE_NATIVE = "NATIVE";
 
 	@JSONField(name = "appid")
 	private String appId; // 微信开放平台审核通过的应用APPID
@@ -69,7 +79,7 @@ public class UnifiedOrderRequest extends WeixinpayBaseRequest<UnifiedOrderRespon
 	private String sceneInfo; // 该字段用于统一下单时上报场景信息，目前支持上报实际门店信息。
 
 	/**
-	 * 统一下单
+	 * App 统一下单
 	 * 
 	 * @param outTradeNo 商户系统内部订单号，要求32个字符内，必须在同一个商户号下唯一
 	 * @param totalFee 订单总金额（分），单位别弄错，1元=10角=100分
@@ -83,7 +93,7 @@ public class UnifiedOrderRequest extends WeixinpayBaseRequest<UnifiedOrderRespon
 	}
 	
 	/**
-	 * 统一下单
+	 * App 统一下单
 	 * 
 	 * @param outTradeNo 商户系统内部订单号，要求32个字符内，必须在同一个商户号下唯一
 	 * @param totalFee 订单总金额（分），单位别弄错，1元=10角=100分
@@ -101,16 +111,52 @@ public class UnifiedOrderRequest extends WeixinpayBaseRequest<UnifiedOrderRespon
 		this.spbillCreateIp = spbillCreateIp;
 		this.attach = attach;
 		this.notifyUrl = notifyUrl;
+		this.tradeType = TRADE_TYPE_APP;
+	}
+	
+	/**
+	 * 二维码统一下单
+	 * 
+	 * @param outTradeNo 商户系统内部订单号，要求32个字符内，必须在同一个商户号下唯一
+	 * @param body 商品描述，格式：app名称-商品名称
+	 * @param totalFee 订单总金额（分），单位别弄错，1元=10角=100分
+	 * @param spbillCreateIp 用户端实际ip
+	 * @param notifyUrl 接收微信支付异步通知回调地址，通知url必须为直接可访问的url，不能携带参数
+	 */
+	public UnifiedOrderRequest(String outTradeNo, String body, Integer totalFee, String spbillCreateIp,
+			String notifyUrl) {
+		this(outTradeNo, body, totalFee, spbillCreateIp, notifyUrl, null);
+	}
+	
+	/**
+	 * 二维码统一下单
+	 * 
+	 * @param outTradeNo 商户系统内部订单号，要求32个字符内，必须在同一个商户号下唯一
+	 * @param body 商品描述，格式：app名称-商品名称
+	 * @param totalFee 订单总金额（分），单位别弄错，1元=10角=100分
+	 * @param spbillCreateIp 用户端实际ip
+	 * @param notifyUrl 接收微信支付异步通知回调地址，通知url必须为直接可访问的url，不能携带参数
+	 * @param attach 自定义数据（非必填），在查询API和支付通知中原样返回，该字段主要用于商户携带订单的自定义数据
+	 */
+	public UnifiedOrderRequest(String outTradeNo, String body, Integer totalFee, String spbillCreateIp,
+			String notifyUrl, String attach) {
+		this();
+		this.body = body;
+		this.outTradeNo = outTradeNo;
+		this.totalFee = totalFee;
+		this.totalFee = totalFee;
+		this.spbillCreateIp = spbillCreateIp;
+		this.notifyUrl = notifyUrl;
+		this.tradeType = TRADE_TYPE_NATIVE;
 	}
 
 	public UnifiedOrderRequest() {
 		super("pay/unifiedorder");
 		this.appId = WeixinpayConfigUtil.appId;
 		this.mchId = WeixinpayConfigUtil.mchId;
-		this.tradeType = "APP";
 		this.nonceStr = WeixinpayUtil.getRandomString(15);
 	}
-
+	
 	public String getAppId() {
 		return appId;
 	}
