@@ -80,7 +80,7 @@ public class WeixinpayUtil {
 	 * @return money * 100，元转换成分
 	 */
 	public static Integer yuanToCent(double money) {
-		return new BigDecimal(money).multiply(new BigDecimal(100)).intValue();
+		return (int) new BigDecimal(money).multiply(new BigDecimal(100)).doubleValue();
 	}
 	
 	/**
